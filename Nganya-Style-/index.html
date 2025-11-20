@@ -33,6 +33,12 @@
             letter-spacing: 1px;
         }
 
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
         nav ul {
             list-style: none;
             display: flex;
@@ -53,6 +59,111 @@
             color: #ffcc00;
         }
 
+        .download-nav-btn {
+            background: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .download-nav-btn:hover {
+            background: #e6b800;
+            transform: translateY(-2px);
+        }
+
+        /* ---------------- ADVERTISEMENT POPUP ---------------- */
+        .ad-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .ad-popup.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .ad-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: scale(0.7);
+            transition: transform 0.3s ease;
+        }
+
+        .ad-popup.active .ad-content {
+            transform: scale(1);
+        }
+
+        .ad-content h2 {
+            color: #ffcc00;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .ad-content p {
+            margin-bottom: 25px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .download-btn {
+            background: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .download-btn:hover {
+            background: #e6b800;
+            transform: translateY(-2px);
+        }
+
+        .countdown {
+            font-size: 14px;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        .close-ad {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1001;
+        }
 
         /* ---------------- HERO ---------------- */
         .hero {
@@ -89,6 +200,7 @@
             display: flex;
             gap: 15px;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -99,6 +211,8 @@
             font-weight: 600;
             font-size: 16px;
             transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .primary { background: #ffcc00; color: #000; }
@@ -178,20 +292,77 @@
             font-size: 14px;
             color: #777;
         }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-right {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+            
+            nav ul {
+                gap: 15px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .download-nav-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 200px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
+<!-- ADVERTISEMENT POPUP -->
+<div class="ad-popup" id="adPopup">
+    <button class="close-ad" onclick="closeAd()">×</button>
+    <div class="ad-content">
+        <h2>📱 Download Our App!</h2>
+        <p>Get the full Nganya Style experience on your mobile device. Book rides faster and get exclusive features!</p>
+        
+        <button class="download-btn" onclick="downloadApp()">
+            ⬇️ Download APK Now
+        </button>
+        
+        <div class="countdown" id="countdown">
+            This ad will close in <span id="timer">10</span> seconds
+        </div>
+    </div>
+</div>
+
 <!-- NAVIGATION BAR -->
 <nav>
     <h1>Nganya Style</h1>
-    <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="client.html">Passenger</a></li>
-        <li><a href="driver.html">Driver</a></li>
-        <li><a href="admin.html">Admin</a></li>
-    </ul>
+    <div class="nav-right">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="client.html">Passenger</a></li>
+            <li><a href="driver.html">Driver</a></li>
+            <li><a href="admin.html">Admin</a></li>
+        </ul>
+        <button class="download-nav-btn" onclick="downloadApp()">
+            📱 Download App
+        </button>
+    </div>
 </nav>
 
 <!-- HERO SECTION -->
@@ -201,9 +372,10 @@
         <p>Connecting passengers, drivers, and administrators with real-time transport technology that makes urban travel smooth and transparent.</p>
 
         <div class="cta-buttons">
-            <a href="client.html"><button class="btn primary">Book a Ride</button></a>
-            <a href="driver.html"><button class="btn secondary">Become a Rider</button></a>
-            <a href="admin.html"><button class="btn admin">Admin Control</button></a>
+            <a href="client.html" class="btn primary">Book a Ride</a>
+            <a href="driver.html" class="btn secondary">Become a Rider</a>
+            <a href="admin.html" class="btn admin">Admin Control</a>
+            <button class="btn primary" onclick="downloadApp()">📱 Download App</button>
         </div>
     </div>
 </section>
@@ -256,8 +428,11 @@
             <a href="driver.html">Driver</a>
             <a href="admin.html">Admin</a>
         </div>
-
-    
+        
+        <div>
+            <h3>Get The App</h3>
+            <a href="javascript:void(0)" onclick="downloadApp()">📱 Download APK</a>
+            <p>Available for Android devices</p>
         </div>
     </div>
 
@@ -265,6 +440,71 @@
         © 2025 Nganya Project – All Rights Reserved
     </div>
 </footer>
+
+<script>
+    let countdownTimer;
+    let seconds = 10;
+    let adShown = sessionStorage.getItem('adShown');
+
+    // Show ad on page load (only once per session)
+    window.addEventListener('load', function() {
+        if (!adShown) {
+            setTimeout(() => {
+                showAd();
+            }, 2000); // Show after 2 seconds delay
+        }
+    });
+
+    function showAd() {
+        const popup = document.getElementById('adPopup');
+        popup.classList.add('active');
+        sessionStorage.setItem('adShown', 'true');
+        
+        // Start countdown
+        startCountdown();
+    }
+
+    function closeAd() {
+        const popup = document.getElementById('adPopup');
+        popup.classList.remove('active');
+        clearInterval(countdownTimer);
+        
+        // Show ad again after 5 minutes
+        setTimeout(() => {
+            sessionStorage.removeItem('adShown');
+        }, 5 * 60 * 1000); // 5 minutes
+    }
+
+    function startCountdown() {
+        const timerElement = document.getElementById('timer');
+        seconds = 10;
+        timerElement.textContent = seconds;
+        
+        countdownTimer = setInterval(() => {
+            seconds--;
+            timerElement.textContent = seconds;
+            
+            if (seconds <= 0) {
+                closeAd();
+            }
+        }, 1000);
+    }
+
+    function downloadApp() {
+        // Open APK download in new tab
+        window.open('https://files.giftedtech.top/file/NGANYA%20STYLE.apk', '_blank');
+        
+        // Optional: Close the ad if it's open
+        closeAd();
+    }
+
+    // Close ad when clicking outside the content
+    document.getElementById('adPopup').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeAd();
+        }
+    });
+</script>
 
 </body>
 </html>
